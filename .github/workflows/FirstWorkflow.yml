@@ -33,3 +33,5 @@ jobs:
           ls -al
           echo "Value: $MY_ENV_VAR"
           echo "Secret: $MY_SECRET"
+      - name: Get Github context
+        run: echo "${{ toJson(github) }}"
