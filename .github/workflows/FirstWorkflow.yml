@@ -28,3 +28,4 @@ jobs:
           hostname
           pwd
           ls -al
+          echo "Value: $MY_ENV_VAR"
