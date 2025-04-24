@@ -10,7 +10,3 @@
 <script setup lang="ts">
   import AppMenu from './components/AppMenu.vue';
 </script>
-<script setup lang="ts">
-import AppMenu from './components/AppMenu.vue';
-let myVar = "Not used";
-</script>
