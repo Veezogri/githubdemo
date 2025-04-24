@@ -1,7 +1,7 @@
 name: FirstWorkflow
 
-on: 
-  workflow_dispatch:
+on: [push, workflow_dispatch]
+  
 
 jobs: 
   first-job:
@@ -11,7 +11,10 @@ jobs:
         run: echo "Hello World"
         
       - name: Print a second step
-        run: echo "Another Step"
+        run: | 
+          echo "Another Step"
+          echo "Another Step 2"
+          
 
       - name: Print a third step
         shell: python
