@@ -13,3 +13,7 @@ jobs:
       - name: Print a second step
         run: echo "Another Step"
 
+      - name: Print a third step
+        shell: python
+        run: print("Woaw A Python Step")
+
