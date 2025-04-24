@@ -24,6 +24,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: check file there
+        env:
+          MY_ENV_VAR: "DefaultValue"
         run: |
           hostname
           pwd
