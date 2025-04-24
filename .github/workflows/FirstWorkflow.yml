@@ -13,6 +13,7 @@ jobs:
       - name: Print a second step
         run: | 
           echo "Another Step"
+          sleep 600
           echo "Another Step 2"
           
 
