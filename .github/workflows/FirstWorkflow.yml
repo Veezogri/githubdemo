@@ -26,8 +26,10 @@ jobs:
       - name: check file there
         env:
           MY_ENV_VAR: "DefaultValue"
+          MY_SECRET: "$MY_SECRET"
         run: |
           hostname
           pwd
           ls -al
           echo "Value: $MY_ENV_VAR"
+          echo "Secret: $MY_SECRET"
