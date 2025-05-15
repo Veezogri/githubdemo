@@ -45,6 +45,20 @@ jobs:
         with:
             start: npm run dev
             wait-on: 'http://localhost:5173'
+    services:
+        db:
+            image: postgres:17.4-alpine.21
+            ports:
+                - 5432:5432
+            env:
+                POSTGRES_USER: ${{ secrets.DB_USERNAME }}
+                POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+                POSTGRES_DB: gh_db
+            options: >-
+                --health-cmd pg_isready
+                --health-interval 10s
+                --health-timeout 5s
+                --health-retries 5
 
   build:
     needs: test
