@@ -36,9 +36,7 @@ jobs:
         run: npm run lint
     
   test:
-    runs-on: ubuntu-latest
-    environment: secrets
-    
+    runs-on: ubuntu-latest   
       
     services:
         db:
