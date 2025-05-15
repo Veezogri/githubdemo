@@ -38,14 +38,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     environment: secrets
-    steps:
-      - name: Get code
-        uses: actions/checkout@v4
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
-        with:
-            start: npm run dev
-            wait-on: 'http://localhost:5173'
+    
+      
     services:
         db:
             image: postgres:17.4-alpine3.21
@@ -60,6 +54,32 @@ jobs:
                 --health-interval 10s
                 --health-timeout 5s
                 --health-retries 5
+    steps:
+      - name: Get code
+        uses: actions/checkout@v4
+
+      - name: Seed the database
+        run: >
+          PGPASSWORD=${{ secrets.DB_PASSWORD }} psql -h localhost
+          -U ${{ secrets.DB_USERNAME }}
+          -d gh_db
+          -f ${{ github.workspace }}/indus/data/init_db.sql
+
+      - name: Start Postgres REST
+        run: >
+          docker run -d --rm --net=host
+          -e PGRST_JWT_SECRET="${{ secrets.PGRST_JWT_SECRET }}"
+          -e PGRST_DB_URI="postgres://${{ secrets.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@localhost/gh_db"
+          postgrest/postgrest
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          start: npm run dev
+          wait-on: "http://localhost:5173"
+        env:
+          VITE_BACKEND_TOKEN: ${{ secrets.VITE_BACKEND_TOKEN }}
+        
 
   build:
     needs: test
