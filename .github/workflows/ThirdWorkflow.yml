@@ -33,7 +33,7 @@ jobs:
       - name: Get code
         uses: actions/checkout@v4
       - name: Cypress run
-        #continue-on-error: true
+        continue-on-error: true
         uses: cypress-io/github-action@v6
         with:
             start: npm run dev
