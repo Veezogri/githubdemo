@@ -3,8 +3,8 @@ name: Fourth Workflow
 on:
   push:
     branches:
-        -master
-        -'releases/**'
+        - master
+        - 'releases/**'
   pull_request:
     branches-ignore:
         - test
