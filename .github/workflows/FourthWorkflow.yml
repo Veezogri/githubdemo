@@ -126,6 +126,9 @@ jobs:
   publish-container:
     needs: [build, lint]
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Get code
         uses: actions/checkout@v4
