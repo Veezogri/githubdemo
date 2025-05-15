@@ -5,6 +5,11 @@ on:
     branches:
         -master
         -'releases/**'
+  pull_request:
+    branches-ignore:
+        - test
+    types:
+        - opened
   workflow_dispatch:
     inputs:
       display-bom:
@@ -83,6 +88,9 @@ jobs:
 
   deploy:
     needs: [build, lint]
+    if: github.event_name != 'pull_request'
     uses: ./.github/workflows/deploy.yml
     with:
         artifact-name: my-app
+  
+    
