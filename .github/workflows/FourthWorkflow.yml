@@ -41,8 +41,9 @@ jobs:
   build:
     needs: test
     runs-on: ubuntu-latest
-    outputs: 
+    outputs:
       bom: ${{ steps.publish-bom.outputs.bom_list }}
+      result: ${{ needs.lint.outputs.job-result }}
     steps:
       - name: Get code
         uses: actions/checkout@v4
