@@ -3,30 +3,51 @@ name: Reusable Deploy
 on: 
   workflow_call:
     inputs:
-        artifact-name:
-            required: false
-            type: string
+      artifact-name:
+        required: false
+        type: string
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     outputs:
-        job-result: ${{ steps.output-result.outputs.deployment-result }}
+      job-result: ${{ steps.output.outputs.deployment-result }}
     steps:
       - name: Pseudo Deployment
         run: echo "Deploying App"
+
       - name: Get artifacts
         uses: actions/download-artifact@v4
         with:
           name: ${{ inputs.artifact-name }}
-      - name : Output artifacts
+
+      - name: Output artifacts
         run: ls
+
       - name: Output Result
         id: output
         run: echo "deployment-result=This is an output" >> $GITHUB_OUTPUT
+
       - name: Seed the database
         run: |
           PGPASSWORD=${{ secrets.DB_PASSWORD }} psql -h localhost \
             -U ${{ secrets.DB_USERNAME }} \
             -d gh_db \
             -f ${{ github.workspace }}/indus/data/init_db.sql
+
+      - name: Start Postgres Rest
+        run: |
+          docker run -d --rm --net=host \
+            -e PGRST_JWT_SECRET="${{ secrets.PGRST_JWT_SECRET }}" \
+            -e PGRST_DB_URI="postgres://${{ secrets.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@localhost/gh_db" \
+            postgrest/postgrest
+
+      - name: Cypress run
+        id: cypress-test
+        uses: cypress-io/github-action@v6
+        with:
+          start: npm run dev
+          wait-on: 'http://localhost:5173'
+        env:
+          VITE_BACKEND_TOKEN: ${{ secrets.VITE_BACKEND_TOKEN }}
+
