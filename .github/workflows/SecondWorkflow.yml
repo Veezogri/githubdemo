@@ -56,6 +56,13 @@ jobs:
 
       - name: Build the app
         run: npm run build
+      
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-app
+          path: dist
+
 
   deploy:
     needs: build
@@ -63,3 +70,9 @@ jobs:
     steps:
       - name: Pseudo Deployment
         run: echo "Deploying App"
+      - name: Get artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: my-app
+      - name: Output artifacts
+        run: ls
